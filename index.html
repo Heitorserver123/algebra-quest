@@ -157,32 +157,7 @@
             line-height: 1.6;
         }
 
-        .stats-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 40px;
-        }
 
-        .stat-box {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stat-label {
-            color: #666;
-            margin-top: 10px;
-            font-size: 0.95em;
-        }
 
         .ranking-section {
             background: white;
@@ -522,24 +497,7 @@
             </div>
         </div>
 
-        <div class="stats-overview">
-            <div class="stat-box">
-                <div class="stat-number" id="totalUsers">0</div>
-                <div class="stat-label">Usuários Ativos</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="totalGames">0</div>
-                <div class="stat-label">Jogos Jogados</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="totalQuestions">0</div>
-                <div class="stat-label">Questões Respondidas</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="avgAccuracy">0%</div>
-                <div class="stat-label">Acurácia Média</div>
-            </div>
-        </div>
+
 
         <div class="features">
             <div class="feature-card">
@@ -661,7 +619,6 @@
         // ===== INICIALIZAÇÃO =====
         window.addEventListener('load', () => {
             loadProfile();
-            updateStats();
             generateRankings();
         });
 
