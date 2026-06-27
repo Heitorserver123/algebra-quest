@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Álgebra Quest - Aprenda monômios, polinômios e produtos notáveis">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Álgebra Quest">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23667eea' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dy='.3em' font-weight='bold'>AQ</text></svg>">
+    <link rel="manifest" href="manifest.json">
+    <title>Álgebra Quest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+
+        .header-info div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .nav-tab {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover,
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* DESAFIO DIÁRIO */
+        .daily-challenge-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .daily-challenge-card h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .challenge-timer {
+            font-size: 1.1em;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .challenge-status {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin: 10px 0;
+        }
+
+        .challenge-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .challenge-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .challenge-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* RANKING */
+        .ranking-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ranking-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .ranking-position {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            width: 40px;
+            text-align: center;
+        }
+
+        .ranking-position.first {
+            color: #FFD700;
+        }
+
+        .ranking-position.second {
+            color: #C0C0C0;
+        }
+
+        .ranking-position.third {
+            color: #CD7F32;
+        }
+
+        .ranking-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .ranking-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .ranking-score {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .ranking-points {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #ccc;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .question-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            font-family: 'Courier New', monospace;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f0f0;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8eaf6;
+        }
+
+        .option.correct {
+            border-color: #4CAF50;
+            background: #c8e6c9;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffcdd2;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .explanation {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            transition: width 0.3s;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideInRight 0.3s;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.success {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .notification.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .notification.info {
+            border-left: 4px solid #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.2em;
+            }
+
+            .header-info {
+                font-size: 0.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .game-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .install-prompt {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .install-prompt button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .offline-indicator {
+            background: #f44336;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        .offline-indicator.show {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🎓 Álgebra Quest</h1>
+            <div class="header-info">
+                <div>
+                    <span class="offline-indicator" id="offlineIndicator">📡 Offline</span>
+                </div>
+                <div id="dailyStreak">🔥 Sequência: 0</div>
+                <div id="totalPoints">⭐ Pontos: 0</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="install-prompt" id="installPrompt">
+                Instale o app para acessar offline!
+                <button onclick="installApp()">Instalar</button>
+                <button onclick="dismissInstall()">Depois</button>
+            </div>
+
+            <!-- DESAFIO DIÁRIO -->
+            <div class="section active" id="daily">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="switchTab('daily')">🏆 Desafio Diário</button>
+                    <button class="nav-tab" onclick="switchTab('ranking')">🎯 Ranking</button>
+                    <button class="nav-tab" onclick="switchTab('game')">🎮 Jogar</button>
+                    <button class="nav-tab" onclick="switchTab('stats')">📊 Estatísticas</button>
+                </div>
+
+                <div class="daily-challenge-card">
+                    <h2>🏆 Desafio Diário</h2>
+                    <p id="challengeDescription">Responda 10 questões de Álgebra</p>
+                    <div class="challenge-timer" id="challengeTimer">Tempo restante: --:--</div>
+                    <div class="challenge-status" id="challengeStatus">Não iniciado</div>
+                    <button class="challenge-btn" id="challengeBtn" onclick="startDailyChallenge()">Começar Desafio</button>
+                </div>
+
+                <div class="ranking-container">
+                    <div class="ranking-title">🥇 Seu Desempenho Hoje</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="number" id="todayAttempts">0</div>
+                            <div class="label">Tentativas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number" id="todayBestScore">0</div>
+                            <div class="label">Melhor Pontuação</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ranking-container">
+                    <div class="ranking-title">🌍 Ranking Global</div>
+                    <div id="globalRanking"></div>
+                </div>
+            </div>
+
+            <!-- RANKING -->
+            <div class="section" id="ranking">
+                <div class="nav-tabs">
+                    <button class="nav-tab" onclick="switchTab('daily')">🏆 Desafio Diário</button>
+                    <button class="nav-tab active" onclick="switchTab('ranking')">🎯 Ranking</button>
+                    <button class="nav-tab" onclick="switchTab('game')">🎮 Jogar</button>
+                    <button class="nav-tab" onclick="switchTab('stats')">📊 Estatísticas</button>
+                </div>
+
+                <div class="ranking-container">
+                    <div class="ranking-title">🏅 Top 10 Jogadores - Hoje</div>
+                    <div id="todayRanking"></div>
+                </div>
+
+                <div class="ranking-container">
+                    <div class="ranking-title">🌟 Top 10 Jogadores - Semana</div>
+                    <div id="weekRanking"></div>
+                </div>
+
+                <div class="ranking-container">
+                    <div class="ranking-title">👑 Top 10 Jogadores - Todos os Tempos</div>
+                    <div id="allTimeRanking"></div>
+                </div>
+            </div>
+
+            <!-- JOGO -->
+            <div class="section" id="game">
+                <div class="nav-tabs">
+                    <button class="nav-tab" onclick="switchTab('daily')">🏆 Desafio Diário</button>
+                    <button class="nav-tab" onclick="switchTab('ranking')">🎯 Ranking</button>
+                    <button class="nav-tab active" onclick="switchTab('game')">🎮 Jogar</button>
+                    <button class="nav-tab" onclick="switchTab('stats')">📊 Estatísticas</button>
+                </div>
+
+                <div id="gameMenu">
+                    <div class="card">
+                        <h3>Escolha o Assunto</h3>
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                            <button class="btn btn-primary" onclick="selectSubject('monomios')">📚 Monômios</button>
+                            <button class="btn btn-primary" onclick="selectSubject('polinomios')">🏗️ Polinômios</button>
+                            <button class="btn btn-primary" onclick="selectSubject('desafio')">⚡ Desafio Completo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="difficultyMenu" style="display: none;">
+                    <div class="card">
+                        <h3>Escolha o Nível</h3>
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                            <button class="btn btn-primary" style="background: #4CAF50;" onclick="startGame('easy')">⭐ Fácil</button>
+                            <button class="btn btn-primary" style="background: #FF9800;" onclick="startGame('medium')">⭐⭐ Médio</button>
+                            <button class="btn btn-primary" style="background: #f44336;" onclick="startGame('hard')">⭐⭐⭐ Difícil</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gamePlay" style="display: none;">
+                    <div class="game-stats">
+                        <div class="stat-box">
+                            <div class="number" id="questionNum">1/10</div>
+                            <div class="label">Questão</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number" id="correctCount">0</div>
+                            <div class="label">Acertos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number" id="pointsCount">0</div>
+                            <div class="label">Pontos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number" id="streakCount">0</div>
+                            <div class="label">Sequência</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                    </div>
+
+                    <div class="question-box">
+                        <div class="question-text" id="questionText">Qual é o coeficiente de 5x?</div>
+                        <div class="options" id="optionsContainer"></div>
+                    </div>
+
+                    <div class="explanation" id="explanationBox">
+                        <div id="explanationContent"></div>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Verificar</button>
+                        <button class="btn btn-secondary" onclick="showHint()">💡 Dica</button>
+                    </div>
+                </div>
+
+                <div id="gameEnd" style="display: none; text-align: center;">
+                    <div class="card">
+                        <h3 style="font-size: 1.5em; margin-bottom: 20px;">Jogo Finalizado!</h3>
+                        <div style="font-size: 2.5em; margin: 20px 0;" id="endEmoji">🎉</div>
+                        <h2 style="color: #667eea; margin-bottom: 10px;" id="finalScore">Pontuação: 0</h2>
+                        <p style="color: #666; margin-bottom: 20px;" id="finalMessage">Excelente!</p>
+                        <div class="buttons">
+                            <button class="btn btn-primary" onclick="switchTab('daily')">Voltar</button>
+                            <button class="btn btn-primary" onclick="switchTab('game')">Jogar Novamente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESTATÍSTICAS -->
+            <div class="section" id="stats">
+                <div class="nav-tabs">
+                    <button class="nav-tab" onclick="switchTab('daily')">🏆 Desafio Diário</button>
+                    <button class="nav-tab" onclick="switchTab('ranking')">🎯 Ranking</button>
+                    <button class="nav-tab" onclick="switchTab('game')">🎮 Jogar</button>
+                    <button class="nav-tab active" onclick="switchTab('stats')">📊 Estatísticas</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number" id="statTotalGames">0</div>
+                        <div class="label">Total de Jogos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="statTotalQuestions">0</div>
+                        <div class="label">Questões</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="statTotalCorrect">0</div>
+                        <div class="label">Acertos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="statAccuracy">0%</div>
+                        <div class="label">Acurácia</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Estatísticas por Assunto</h3>
+                    <div id="subjectStats"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Configurações</h3>
+                    <button class="btn btn-secondary" onclick="clearAllData()" style="width: 100%; margin-top: 10px;">🗑️ Limpar Todos os Dados</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== REGISTRO DO SERVICE WORKER =====
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => {
+                console.log('Service Worker não disponível:', err);
+            });
+        }
+
+        // ===== VARIÁVEIS GLOBAIS =====
+        let gameState = {
+            currentSubject: null,
+            currentDifficulty: null,
+            currentQuestion: 0,
+            score: 0,
+            correct: 0,
+            streak: 0,
+            selectedAnswer: null,
+            answered: false,
+            questions: [],
+            totalQuestions: 10,
+            isDailyChallenge: false,
+            stats: {
+                games: [],
+                dailyChallenges: [],
+                errors: []
+            },
+            playerName: 'Você',
+            userId: null
+        };
+
+        let deferredPrompt;
+        let isOnline = navigator.onLine;
+
+        // ===== INICIALIZAÇÃO =====
+        window.addEventListener('load', () => {
+            loadData();
+            updateOfflineIndicator();
+            generateUserId();
+            updateHeader();
+            updateRankings();
+            updateDailyChallenge();
+            setupInstallPrompt();
+        });
+
+        window.addEventListener('online', () => {
+            isOnline = true;
+            updateOfflineIndicator();
+            syncData();
+            showNotification('Conectado à internet!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            updateOfflineIndicator();
+            showNotification('Modo offline ativado', 'info');
+        });
+
+        // ===== FUNÇÕES AUXILIARES =====
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function randomChoice(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function generateUserId() {
+            let userId = localStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('userId', userId);
+            }
+            gameState.userId = userId;
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('algebraQuestData');
+            if (saved) {
+                gameState.stats = JSON.parse(saved);
+            }
+            const name = localStorage.getItem('playerName');
+            if (name) {
+                gameState.playerName = name;
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('algebraQuestData', JSON.stringify(gameState.stats));
+        }
+
+        function updateOfflineIndicator() {
+            const indicator = document.getElementById('offlineIndicator');
+            if (!isOnline) {
+                indicator.classList.add('show');
+            } else {
+                indicator.classList.remove('show');
+            }
+        }
+
+        function updateHeader() {
+            const totalPoints = gameState.stats.games.reduce((sum, g) => sum + g.score, 0);
+            const streak = calculateStreak();
+            document.getElementById('totalPoints').textContent = `⭐ Pontos: ${totalPoints}`;
+            document.getElementById('dailyStreak').textContent = `🔥 Sequência: ${streak}`;
+        }
+
+        function calculateStreak() {
+            const today = new Date().toDateString();
+            let streak = 0;
+            let currentDate = new Date();
+
+            for (let i = 0; i < 365; i++) {
+                const dateStr = currentDate.toDateString();
+                const gamesOnDate = gameState.stats.games.filter(g => new Date(g.date).toDateString() === dateStr);
+                if (gamesOnDate.length > 0) {
+                    streak++;
+                    currentDate.setDate(currentDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // ===== GERADORES DE QUESTÕES =====
+        function generateMonomioQuestion(difficulty) {
+            const types = ['coeficiente', 'parteliteral', 'grau', 'soma', 'subtracao', 'multiplicacao', 'divisao'];
+            const type = randomChoice(types);
+            let question, options, correct, explanation;
+
+            if (type === 'coeficiente') {
+                const coef = randomInt(2, 9);
+                const var1 = randomChoice(['x', 'y', 'z']);
+                question = `Qual é o coeficiente de ${coef}${var1}?`;
+                options = [String(coef), var1, `${coef}${var1}`, '1'];
+                correct = 0;
+                explanation = `O coeficiente é ${coef}.`;
+            } else if (type === 'parteliteral') {
+                const coef = randomInt(2, 9);
+                const vars = randomChoice(['x', 'xy', 'x²', 'x²y']);
+                question = `Qual é a parte literal de ${coef}${vars}?`;
+                options = [String(coef), vars, `${coef}${vars}`, '1'];
+                correct = 1;
+                explanation = `A parte literal é ${vars}.`;
+            } else if (type === 'grau') {
+                const coef = randomInt(2, 9);
+                const exp = randomInt(2, 4);
+                const var1 = randomChoice(['x', 'y', 'z']);
+                question = `Qual é o grau de ${coef}${var1}^${exp}?`;
+                options = [String(coef), String(exp), var1, '1'];
+                correct = 1;
+                explanation = `O grau é ${exp}.`;
+            } else if (type === 'soma') {
+                const coef1 = randomInt(1, 5);
+                const coef2 = randomInt(1, 5);
+                const result = coef1 + coef2;
+                const var1 = randomChoice(['x', 'y', 'z']);
+                question = `Simplifique: ${coef1}${var1} + ${coef2}${var1}`;
+                options = [`${result}${var1}`, `${coef1 + coef2 + 1}${var1}`, `${coef1}${var1}`, `${coef2}${var1}`];
+                correct = 0;
+                explanation = `${coef1} + ${coef2} = ${result}. Resultado: ${result}${var1}.`;
+            } else if (type === 'subtracao') {
+                const coef1 = randomInt(5, 10);
+                const coef2 = randomInt(1, coef1 - 1);
+                const result = coef1 - coef2;
+                const var1 = randomChoice(['x', 'y', 'z']);
+                question = `Simplifique: ${coef1}${var1} - ${coef2}${var1}`;
+                options = [`${result}${var1}`, `${coef1 + coef2}${var1}`, `${coef1}${var1}`, `${coef2}${var1}`];
+                correct = 0;
+                explanation = `${coef1} - ${coef2} = ${result}. Resultado: ${result}${var1}.`;
+            } else if (type === 'multiplicacao') {
+                const coef1 = randomInt(2, 6);
+                const coef2 = randomInt(2, 6);
+                const result = coef1 * coef2;
+                const var1 = randomChoice(['x', 'y']);
+                const var2 = randomChoice(['x', 'y']);
+                question = `Multiplique: ${coef1}${var1} × ${coef2}${var2}`;
+                options = [`${result}${var1}${var2}`, `${coef1 + coef2}${var1}${var2}`, `${result}${var1}`, `${result}${var2}`];
+                correct = 0;
+                explanation = `${coef1} × ${coef2} = ${result}. Resultado: ${result}${var1}${var2}.`;
+            } else if (type === 'divisao') {
+                const coef2 = randomInt(2, 6);
+                const coef1 = coef2 * randomInt(2, 6);
+                const result = coef1 / coef2;
+                const var1 = randomChoice(['x', 'y']);
+                question = `Divida: ${coef1}${var1} ÷ ${coef2}`;
+                options = [`${result}${var1}`, `${coef1 - coef2}${var1}`, `${coef1}${var1}`, `${coef2}${var1}`];
+                correct = 0;
+                explanation = `${coef1} ÷ ${coef2} = ${result}. Resultado: ${result}${var1}.`;
+            }
+
+            return { question, options, correct, explanation };
+        }
+
+        function generatePolinomioQuestion(difficulty) {
+            const types = ['quantidadetermos', 'grau', 'soma'];
+            const type = randomChoice(types);
+            let question, options, correct, explanation;
+
+            if (type === 'quantidadetermos') {
+                const terms = randomInt(2, 4);
+                let expr = `x^${terms}`;
+                for (let i = 1; i < terms; i++) {
+                    expr += ` + ${randomInt(1, 5)}x`;
+                }
+                expr += ` + ${randomInt(1, 5)}`;
+                question = `Quantos termos tem ${expr}?`;
+                options = [String(terms + 1), String(terms), String(terms + 2), '1'];
+                correct = 0;
+                explanation = `${expr} tem ${terms + 1} termos.`;
+            } else if (type === 'grau') {
+                const grau = randomInt(2, 4);
+                const coef = randomInt(1, 5);
+                const coef2 = randomInt(1, 5);
+                const coef3 = randomInt(1, 5);
+                const expr = `${coef}x^${grau} + ${coef2}x + ${coef3}`;
+                question = `Qual é o grau de ${expr}?`;
+                options = [String(grau), String(coef), '1', String(grau + 1)];
+                correct = 0;
+                explanation = `O grau é ${grau}.`;
+            } else if (type === 'soma') {
+                const coef1 = randomInt(1, 4);
+                const coef2 = randomInt(1, 4);
+                const coef3 = randomInt(1, 4);
+                const coef4 = randomInt(1, 4);
+                const result1 = coef1 + coef2;
+                const result2 = coef3 + coef4;
+                question = `Simplifique: (${coef1}x + ${coef3}) + (${coef2}x + ${coef4})`;
+                options = [`${result1}x + ${result2}`, `${coef1 + coef2}x + ${coef3 + coef4}`, `${coef1}x + ${coef3}`, `${result1}x`];
+                correct = 0;
+                explanation = `${coef1}x + ${coef2}x = ${result1}x, ${coef3} + ${coef4} = ${result2}. Resultado: ${result1}x + ${result2}.`;
+            }
+
+            return { question, options, correct, explanation };
+        }
+
+        function generateDesafioQuestion(difficulty) {
+            const type = randomChoice(['monomio', 'polinomio']);
+            if (type === 'monomio') {
+                return generateMonomioQuestion(difficulty);
+            } else {
+                return generatePolinomioQuestion(difficulty);
+            }
+        }
+
+        function generateQuestion(subject, difficulty) {
+            let baseQuestion;
+
+            if (subject === 'monomios') {
+                baseQuestion = generateMonomioQuestion(difficulty);
+            } else if (subject === 'polinomios') {
+                baseQuestion = generatePolinomioQuestion(difficulty);
+            } else if (subject === 'desafio') {
+                baseQuestion = generateDesafioQuestion(difficulty);
+            }
+
+            const shuffledOptions = [...baseQuestion.options].sort(() => Math.random() - 0.5);
+            const newCorrect = shuffledOptions.indexOf(baseQuestion.options[baseQuestion.correct]);
+
+            return {
+                q: baseQuestion.question,
+                options: shuffledOptions,
+                correct: newCorrect,
+                explanation: baseQuestion.explanation
+            };
+        }
+
+        // ===== FUNÇÕES DE NAVEGAÇÃO =====
+        function switchTab(tabName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'ranking') {
+                updateRankings();
+            } else if (tabName === 'stats') {
+                updateStats();
+            } else if (tabName === 'daily') {
+                updateDailyChallenge();
+            }
+        }
+
+        // ===== DESAFIO DIÁRIO =====
+        function startDailyChallenge() {
+            gameState.isDailyChallenge = true;
+            gameState.currentSubject = 'desafio';
+            gameState.currentDifficulty = 'medium';
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.correct = 0;
+            gameState.streak = 0;
+            gameState.selectedAnswer = null;
+            gameState.answered = false;
+            gameState.questions = [];
+
+            for (let i = 0; i < 10; i++) {
+                gameState.questions.push(generateQuestion('desafio', 'medium'));
+            }
+
+            document.getElementById('gameMenu').style.display = 'none';
+            document.getElementById('difficultyMenu').style.display = 'none';
+            document.getElementById('gamePlay').style.display = 'block';
+            document.getElementById('gameEnd').style.display = 'none';
+            document.getElementById('challengeBtn').disabled = true;
+            document.getElementById('challengeBtn').textContent = 'Desafio em Andamento...';
+
+            switchTab('game');
+            loadQuestion();
+        }
+
+        function updateDailyChallenge() {
+            const today = new Date().toDateString();
+            const todayGames = gameState.stats.dailyChallenges.filter(g => new Date(g.date).toDateString() === today);
+            
+            document.getElementById('todayAttempts').textContent = todayGames.length;
+            const bestScore = todayGames.length > 0 ? Math.max(...todayGames.map(g => g.score)) : 0;
+            document.getElementById('todayBestScore').textContent = bestScore;
+
+            if (todayGames.length > 0) {
+                document.getElementById('challengeStatus').textContent = `Você já jogou ${todayGames.length}x hoje`;
+            } else {
+                document.getElementById('challengeStatus').textContent = 'Nenhuma tentativa hoje';
+            }
+
+            updateGlobalRanking();
+        }
+
+        function updateGlobalRanking() {
+            const today = new Date().toDateString();
+            const todayGames = gameState.stats.dailyChallenges.filter(g => new Date(g.date).toDateString() === today);
+            
+            const ranking = [
+                { position: 1, name: 'Você', score: todayGames.length > 0 ? Math.max(...todayGames.map(g => g.score)) : 0 },
+                { position: 2, name: 'João Silva', score: 95 },
+                { position: 3, name: 'Maria Santos', score: 90 },
+                { position: 4, name: 'Pedro Costa', score: 85 },
+                { position: 5, name: 'Ana Oliveira', score: 80 }
+            ];
+
+            let html = '';
+            ranking.forEach(item => {
+                const medal = item.position === 1 ? '🥇' : item.position === 2 ? '🥈' : item.position === 3 ? '🥉' : '';
+                html += `
+                    <div class="ranking-item">
+                        <div class="ranking-position ${item.position === 1 ? 'first' : item.position === 2 ? 'second' : item.position === 3 ? 'third' : ''}">${medal} #${item.position}</div>
+                        <div class="ranking-info">
+                            <div class="ranking-name">${item.name}</div>
+                        </div>
+                        <div class="ranking-points">${item.score}</div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('globalRanking').innerHTML = html;
+        }
+
+        // ===== RANKINGS =====
+        function updateRankings() {
+            const today = new Date().toDateString();
+            const thisWeek = new Date();
+            thisWeek.setDate(thisWeek.getDate() - 7);
+
+            // Ranking de Hoje
+            const todayGames = gameState.stats.games.filter(g => new Date(g.date).toDateString() === today);
+            const todayRanking = generateRankingList(todayGames);
+            document.getElementById('todayRanking').innerHTML = todayRanking;
+
+            // Ranking da Semana
+            const weekGames = gameState.stats.games.filter(g => new Date(g.date) >= thisWeek);
+            const weekRanking = generateRankingList(weekGames);
+            document.getElementById('weekRanking').innerHTML = weekRanking;
+
+            // Ranking de Todos os Tempos
+            const allTimeRanking = generateRankingList(gameState.stats.games);
+            document.getElementById('allTimeRanking').innerHTML = allTimeRanking;
+        }
+
+        function generateRankingList(games) {
+            if (games.length === 0) {
+                return '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nenhum jogo ainda</p></div>';
+            }
+
+            const topScores = games
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 10);
+
+            let html = '';
+            topScores.forEach((game, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                html += `
+                    <div class="ranking-item">
+                        <div class="ranking-position ${index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : ''}">${medal} #${index + 1}</div>
+                        <div class="ranking-info">
+                            <div class="ranking-name">${gameState.playerName}</div>
+                            <div class="ranking-score">${game.subject} - ${game.difficulty}</div>
+                        </div>
+                        <div class="ranking-points">${game.score}</div>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        // ===== JOGO =====
+        function selectSubject(subject) {
+            gameState.currentSubject = subject;
+            document.getElementById('gameMenu').style.display = 'none';
+            document.getElementById('difficultyMenu').style.display = 'block';
+        }
+
+        function startGame(difficulty) {
+            gameState.isDailyChallenge = false;
+            gameState.currentDifficulty = difficulty;
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.correct = 0;
+            gameState.streak = 0;
+            gameState.selectedAnswer = null;
+            gameState.answered = false;
+            gameState.questions = [];
+
+            for (let i = 0; i < gameState.totalQuestions; i++) {
+                gameState.questions.push(generateQuestion(gameState.currentSubject, gameState.currentDifficulty));
+            }
+
+            document.getElementById('gameMenu').style.display = 'none';
+            document.getElementById('difficultyMenu').style.display = 'none';
+            document.getElementById('gamePlay').style.display = 'block';
+            document.getElementById('gameEnd').style.display = 'none';
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            gameState.answered = false;
+            gameState.selectedAnswer = null;
+
+            const question = gameState.questions[gameState.currentQuestion];
+            document.getElementById('questionText').textContent = question.q;
+            document.getElementById('questionNum').textContent = `${gameState.currentQuestion + 1}/${gameState.questions.length}`;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            document.getElementById('submitBtn').textContent = 'Verificar';
+            document.getElementById('explanationBox').classList.remove('show');
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (gameState.answered) return;
+
+            document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            gameState.selectedAnswer = index;
+        }
+
+        function submitAnswer() {
+            if (gameState.answered) {
+                nextQuestion();
+                return;
+            }
+
+            if (gameState.selectedAnswer === null) {
+                showNotification('Selecione uma resposta!', 'error');
+                return;
+            }
+
+            gameState.answered = true;
+            const question = gameState.questions[gameState.currentQuestion];
+            const isCorrect = gameState.selectedAnswer === question.correct;
+
+            const options = document.querySelectorAll('.option');
+            options[question.correct].classList.add('correct');
+            options[gameState.selectedAnswer].classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            if (isCorrect) {
+                gameState.correct++;
+                gameState.score += 10;
+                gameState.streak++;
+            } else {
+                gameState.streak = 0;
+            }
+
+            document.getElementById('correctCount').textContent = gameState.correct;
+            document.getElementById('pointsCount').textContent = gameState.score;
+            document.getElementById('streakCount').textContent = gameState.streak;
+            document.getElementById('submitBtn').textContent = 'Próxima';
+            updateProgress();
+
+            showExplanation(isCorrect, question);
+        }
+
+        function showExplanation(isCorrect, question) {
+            const explanationBox = document.getElementById('explanationBox');
+            const content = document.getElementById('explanationContent');
+
+            if (isCorrect) {
+                content.innerHTML = `<strong style="color: #4CAF50;">✓ Correto!</strong> ${question.explanation}`;
+            } else {
+                content.innerHTML = `<strong style="color: #f44336;">✗ Incorreto!</strong> ${question.explanation}`;
+            }
+
+            explanationBox.classList.add('show');
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestion++;
+
+            if (gameState.currentQuestion >= gameState.questions.length) {
+                endGame();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('gamePlay').style.display = 'none';
+            document.getElementById('gameEnd').style.display = 'block';
+
+            const percentage = Math.round((gameState.correct / gameState.questions.length) * 100);
+            document.getElementById('finalScore').textContent = `Pontuação: ${gameState.score}`;
+            
+            let emoji = '😢';
+            let message = 'Você pode melhorar!';
+            
+            if (percentage >= 80) {
+                emoji = '🎉';
+                message = 'Excelente desempenho!';
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                message = 'Bom trabalho!';
+            } else if (percentage >= 40) {
+                emoji = '💪';
+                message = 'Você está no caminho certo!';
+            }
+
+            document.getElementById('endEmoji').textContent = emoji;
+            document.getElementById('finalMessage').textContent = `${message} (${gameState.correct}/${gameState.questions.length} acertos)`;
+
+            // Salvar jogo
+            const gameRecord = {
+                subject: gameState.currentSubject,
+                difficulty: gameState.currentDifficulty,
+                score: gameState.score,
+                correct: gameState.correct,
+                total: gameState.totalQuestions,
+                date: new Date().toISOString()
+            };
+
+            if (gameState.isDailyChallenge) {
+                gameState.stats.dailyChallenges.push(gameRecord);
+                showNotification('Desafio Diário concluído! 🏆', 'success');
+            } else {
+                gameState.stats.games.push(gameRecord);
+                showNotification('Jogo salvo!', 'success');
+            }
+
+            saveData();
+            updateHeader();
+            document.getElementById('challengeBtn').disabled = false;
+            document.getElementById('challengeBtn').textContent = 'Começar Desafio';
+        }
+
+        function showHint() {
+            showNotification('💡 Releia a questão com cuidado!', 'info');
+        }
+
+        function updateProgress() {
+            const progress = ((gameState.currentQuestion + 1) / gameState.questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // ===== ESTATÍSTICAS =====
+        function updateStats() {
+            const stats = gameState.stats;
+            
+            const totalGames = stats.games.length;
+            const totalQuestions = stats.games.reduce((sum, g) => sum + g.total, 0);
+            const totalCorrect = stats.games.reduce((sum, g) => sum + g.correct, 0);
+            const accuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+            document.getElementById('statTotalGames').textContent = totalGames;
+            document.getElementById('statTotalQuestions').textContent = totalQuestions;
+            document.getElementById('statTotalCorrect').textContent = totalCorrect;
+            document.getElementById('statAccuracy').textContent = accuracy + '%';
+
+            // Estatísticas por assunto
+            const subjectStats = {};
+            stats.games.forEach(game => {
+                if (!subjectStats[game.subject]) {
+                    subjectStats[game.subject] = { correct: 0, total: 0 };
+                }
+                subjectStats[game.subject].correct += game.correct;
+                subjectStats[game.subject].total += game.total;
+            });
+
+            let subjectHtml = '';
+            Object.keys(subjectStats).forEach(subject => {
+                const data = subjectStats[subject];
+                const percentage = Math.round((data.correct / data.total) * 100);
+                const labels = { monomios: '📚 Monômios', polinomios: '🏗️ Polinômios', desafio: '⚡ Desafio' };
+                subjectHtml += `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>${labels[subject] || subject}</span>
+                            <span>${percentage}%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #ddd; border-radius: 10px; overflow: hidden;">
+                            <div style="width: ${percentage}%; height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
+                        </div>
+                        <div style="font-size: 0.85em; color: #999; margin-top: 3px;">${data.correct}/${data.total} acertos</div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('subjectStats').innerHTML = subjectHtml || '<p style="color: #999;">Nenhum jogo ainda</p>';
+        }
+
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação não pode ser desfeita!')) {
+                gameState.stats = { games: [], dailyChallenges: [], errors: [] };
+                saveData();
+                updateStats();
+                updateHeader();
+                showNotification('Dados limpos com sucesso!', 'success');
+            }
+        }
+
+        // ===== SINCRONIZAÇÃO =====
+        function syncData() {
+            if (isOnline) {
+                const data = JSON.stringify(gameState.stats);
+                // Aqui você poderia enviar para um servidor
+                console.log('Dados sincronizados:', data);
+            }
+        }
+
+        // ===== INSTALAÇÃO =====
+        function setupInstallPrompt() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installPrompt').style.display = 'block';
+            });
+
+            window.addEventListener('appinstalled', () => {
+                console.log('App instalado!');
+                deferredPrompt = null;
+                document.getElementById('installPrompt').style.display = 'none';
+            });
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showNotification('App instalado com sucesso!', 'success');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        function dismissInstall() {
+            document.getElementById('installPrompt').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
