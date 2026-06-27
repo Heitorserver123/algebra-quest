@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Álgebra Quest - Estude com seus amigos e compita pelo melhor desempenho. App offline com ranking compartilhado.">
-    <title>Álgebra Quest - Estude com Amigos</title>
+    <meta name="description" content="Álgebra Quest - Estude monômios, polinômios e produtos notáveis de forma interativa.">
+    <title>Álgebra Quest</title>
     <style>
         * {
             margin: 0;
@@ -71,7 +71,7 @@
         .hero p {
             color: #666;
             font-size: 1.1em;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             line-height: 1.6;
         }
 
@@ -100,23 +100,13 @@
         }
 
         .btn-primary:hover {
-            transform: scale(1.05);
+            transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #f5f5f5;
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
@@ -125,24 +115,19 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
-            animation: slideUp 0.6s;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            animation: fadeIn 0.6s;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
         .feature-icon {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 15px;
         }
 
@@ -155,259 +140,20 @@
         .feature-card p {
             color: #666;
             line-height: 1.6;
-        }
-
-
-
-        .ranking-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .ranking-section h2 {
-            color: #667eea;
-            margin-bottom: 30px;
-            font-size: 1.8em;
-            text-align: center;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            color: #999;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            transition: all 0.3s;
-        }
-
-        .leaderboard-item:hover {
-            background: #efefef;
-            transform: translateX(5px);
-        }
-
-        .leaderboard-position {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #667eea;
-            width: 50px;
-            text-align: center;
-        }
-
-        .leaderboard-info {
-            flex: 1;
-            margin-left: 15px;
-        }
-
-        .leaderboard-name {
-            font-weight: bold;
-            color: #333;
-            font-size: 1.1em;
-        }
-
-        .leaderboard-details {
-            color: #999;
-            font-size: 0.9em;
-            margin-top: 3px;
-        }
-
-        .leaderboard-score {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #667eea;
-            min-width: 80px;
-            text-align: right;
-        }
-
-        .profile-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .profile-section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
-
-        .profile-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            color: #333;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-
-
-        .share-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .share-section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
-
-        .share-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .share-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .share-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .share-whatsapp {
-            background: #25D366;
-            color: white;
-        }
-
-        .share-telegram {
-            background: #0088cc;
-            color: white;
-        }
-
-        .share-copy {
-            background: #667eea;
-            color: white;
+            font-size: 0.95em;
         }
 
         footer {
             text-align: center;
             color: white;
+            margin-top: 60px;
             padding: 30px;
-            margin-top: 40px;
+            opacity: 0.8;
         }
 
         footer p {
-            margin-bottom: 10px;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            animation: slideInRight 0.3s;
-            z-index: 1000;
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .notification.success {
-            border-left: 4px solid #4CAF50;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .empty-state-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-
-        .app-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .app-link:hover {
-            text-decoration: underline;
+            margin: 5px 0;
+            font-size: 0.95em;
         }
 
         @media (max-width: 768px) {
@@ -427,14 +173,8 @@
                 width: 100%;
             }
 
-            .leaderboard-item {
-                flex-wrap: wrap;
-            }
-
-            .leaderboard-score {
-                width: 100%;
-                text-align: left;
-                margin-top: 10px;
+            .features {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -443,19 +183,16 @@
     <div class="container">
         <header>
             <h1>🎓 Álgebra Quest</h1>
-            <p>Estude com seus amigos e compita pelo melhor desempenho!</p>
+            <p>Aprenda Álgebra de Forma Interativa e Divertida</p>
         </header>
 
         <div class="hero">
             <h2>Bem-vindo ao Álgebra Quest</h2>
-            <p>Um app completo para aprender monômios, polinômios e produtos notáveis. Estude offline, compita com amigos e sincronize seus dados!</p>
+            <p>Um app completo para aprender monômios, polinômios e produtos notáveis. Estude offline, pratique com questões dinâmicas e sincronize seus dados!</p>
             <div class="btn-group">
-                <a href="algebra-quest-pwa.html" class="btn btn-primary">📱 Abrir App Agora</a>
-                <button class="btn btn-secondary" onclick="scrollToRanking()">🏆 Ver Ranking</button>
+                <a href="algebra-quest-pwa.html" class="btn btn-primary">🚀 Abrir App Agora</a>
             </div>
         </div>
-
-
 
         <div class="features">
             <div class="feature-card">
@@ -470,8 +207,8 @@
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🏆</div>
-                <h3>Compita</h3>
-                <p>Desafios diários e ranking global para competir com seus amigos e colegas.</p>
+                <h3>Desafio Diário</h3>
+                <p>Teste suas habilidades com o desafio diário e acompanhe seu progresso.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📱</div>
@@ -485,20 +222,16 @@
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
-                <h3>Estatísticas</h3>
-                <p>Acompanhe seu progresso com estatísticas detalhadas e recomendações personalizadas.</p>
+                <h3>Relatório</h3>
+                <p>Acompanhe seu progresso com estatísticas detalhadas e análise de erros.</p>
             </div>
         </div>
 
-
-
-
-
         <footer>
             <p>© 2026 Álgebra Quest - Aprenda Álgebra de Forma Divertida</p>
-            <p>Desenvolvido para ajudar você e seus amigos a aprender melhor! 🚀</p>
+            <p>Desenvolvido para ajudar você a aprender melhor! 🚀</p>
             <p style="margin-top: 20px; opacity: 0.8; font-size: 0.9em;">
-                <strong>Dica:</strong> O app funciona 100% offline! Baixe agora e estude em qualquer lugar.
+                <strong>Dica:</strong> O app funciona 100% offline! Clique em "Abrir App Agora" para começar.
             </p>
         </footer>
     </div>
@@ -507,5 +240,4 @@
         // Sem scripts necessários
     </script>
 </body>
-<!-- Force redeploy v2 -->
 </html>
