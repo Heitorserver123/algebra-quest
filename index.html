@@ -559,29 +559,7 @@
         </div>
     </div>
 
-    <div class="profile-section">
-        <h2>&#128100; Seu Perfil</h2>
-        <div class="profile-form">
-            <div class="form-group">
-                <label for="playerName">Nome do Jogador</label>
-                <input type="text" id="playerName" placeholder="Digite seu nome" onchange="saveProfile()">
-            </div>
-            <div class="form-group">
-                <label for="school">Escola/Turma</label>
-                <input type="text" id="school" placeholder="Sua escola ou turma" onchange="saveProfile()">
-            </div>
-        </div>
-    </div>
 
-    <div class="share-section">
-        <h2>&#128228; Compartilhe com Amigos</h2>
-        <p style="color: #666; margin-bottom: 20px;">Convide seus amigos para estudar juntos!</p>
-        <div class="share-buttons">
-            <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">&#128172; WhatsApp</button>
-            <button class="share-btn share-telegram" onclick="shareTelegram()">&#9992;&#65039; Telegram</button>
-            <button class="share-btn share-copy" onclick="copyLink()">&#128279; Copiar Link</button>
-        </div>
-    </div>
 
     <footer>
         <p>&#169; 2026 Álgebra Quest - Aprenda Álgebra de Forma Divertida</p>
@@ -593,8 +571,6 @@
 </div>
 
 <script>
-    window.addEventListener('load', () => { loadProfile(); });
-
     function showPanel(id, btn) {
         document.querySelectorAll('.study-panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.study-nav-btn').forEach(b => b.classList.remove('active'));
@@ -604,39 +580,6 @@
 
     function scrollToStudy() {
         document.getElementById('studySection').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function saveProfile() {
-        localStorage.setItem('playerName', document.getElementById('playerName').value);
-        localStorage.setItem('school', document.getElementById('school').value);
-        showNotification('Perfil salvo!', 'success');
-    }
-
-    function loadProfile() {
-        document.getElementById('playerName').value = localStorage.getItem('playerName') || '';
-        document.getElementById('school').value = localStorage.getItem('school') || '';
-    }
-
-    function shareWhatsApp() {
-        const msg = 'Estou estudando Álgebra Quest! Venha estudar comigo! Funciona offline!';
-        window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
-    }
-
-    function shareTelegram() {
-        const msg = 'Estou estudando Álgebra Quest! Venha estudar comigo! Funciona offline!';
-        window.open('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(msg), '_blank');
-    }
-
-    function copyLink() {
-        navigator.clipboard.writeText(window.location.href).then(() => showNotification('Link copiado!', 'success'));
-    }
-
-    function showNotification(message, type) {
-        const n = document.createElement('div');
-        n.className = 'notification ' + (type || '');
-        n.textContent = message;
-        document.body.appendChild(n);
-        setTimeout(() => n.remove(), 3000);
     }
 </script>
 </body>
