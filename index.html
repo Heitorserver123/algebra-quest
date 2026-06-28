@@ -3,241 +3,641 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Álgebra Quest - Estude monômios, polinômios e produtos notáveis de forma interativa.">
-    <title>Álgebra Quest</title>
+    <title>Álgebra Quest - Estude com Amigos</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; color: white; margin-bottom: 40px; animation: slideDown 0.5s; }
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        .hero { background: white; border-radius: 20px; padding: 40px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; animation: fadeIn 0.6s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hero h2 { color: #667eea; margin-bottom: 20px; font-size: 2em; }
+        .hero p { color: #666; font-size: 1.1em; margin-bottom: 20px; line-height: 1.6; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 15px 40px; border: none; border-radius: 25px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(102,126,234,0.4); }
+        .btn-secondary { background: white; color: #667eea; border: 2px solid #667eea; }
+        .btn-secondary:hover { background: #f5f5f5; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .feature-card { background: white; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s; animation: slideUp 0.6s; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .feature-icon { font-size: 3em; margin-bottom: 15px; }
+        .feature-card h3 { color: #667eea; margin-bottom: 10px; font-size: 1.3em; }
+        .feature-card p { color: #666; line-height: 1.6; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+        /* AREA DE ESTUDOS */
+        .study-section { background: white; border-radius: 20px; padding: 40px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .study-section > h2 { color: #667eea; font-size: 2em; text-align: center; margin-bottom: 8px; }
+        .study-intro { text-align: center; color: #888; margin-bottom: 28px; font-size: 1em; }
+        .study-nav { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+        .study-nav-btn { padding: 10px 22px; border: 2px solid #667eea; border-radius: 25px; background: white; color: #667eea; font-size: 0.95em; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+        .study-nav-btn:hover, .study-nav-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .study-panel { display: none; animation: fadeIn 0.4s; }
+        .study-panel.active { display: block; }
+        .study-panel h3 { color: #764ba2; font-size: 1.5em; margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 3px solid #667eea; }
+        .study-panel h3:first-child { margin-top: 0; }
+        .study-panel h4 { color: #667eea; font-size: 1.15em; margin: 18px 0 8px; }
+        .study-panel p { color: #444; line-height: 1.8; margin-bottom: 12px; font-size: 1em; }
+        .formula-box { background: linear-gradient(135deg, #f0f3ff, #e8eeff); border: 2px solid #667eea; border-radius: 12px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 1.05em; color: #333; line-height: 2; }
+        .formula-box strong { color: #764ba2; }
+        .tip-box { background: #fff8e1; border-left: 5px solid #ffc107; border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 14px 0; }
+        .tip-box strong { color: #e65100; display: block; margin-bottom: 6px; }
+        .tip-box p { color: #555; margin: 0; line-height: 1.7; }
+        .example-box { background: #f1fff4; border: 2px solid #4caf50; border-radius: 12px; padding: 16px 20px; margin: 14px 0; }
+        .example-box .ex-title { font-weight: bold; color: #2e7d32; margin-bottom: 10px; font-size: 1.02em; }
+        .example-box p { color: #444; margin-bottom: 6px; }
+        .ex-step { font-family: 'Courier New', monospace; color: #1b5e20; background: white; border-radius: 8px; padding: 7px 12px; margin: 5px 0; font-size: 0.97em; }
+        .study-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.96em; }
+        .study-table th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 11px 15px; text-align: left; }
+        .study-table td { padding: 10px 15px; border-bottom: 1px solid #eee; color: #444; }
+        .study-table tr:nth-child(even) td { background: #f8f8ff; }
+        .study-table tr:hover td { background: #eef0ff; }
+        .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 14px 0; }
+        .concept-card { background: #f8f8ff; border-radius: 12px; padding: 16px; border-top: 4px solid #667eea; }
+        .concept-card h5 { color: #667eea; margin-bottom: 8px; font-size: 1.02em; }
+        .concept-card p { color: #555; font-size: 0.93em; margin: 0; line-height: 1.6; }
+        .produto-card { background: white; border-radius: 14px; padding: 20px; margin: 14px 0; box-shadow: 0 4px 15px rgba(102,126,234,0.15); border-left: 6px solid #764ba2; }
+        .produto-card .pc-nome { font-size: 1.08em; font-weight: bold; color: #764ba2; margin-bottom: 10px; }
+        .produto-card .pc-formula { font-family: 'Courier New', monospace; font-size: 1.08em; background: #f0f3ff; border-radius: 8px; padding: 9px 14px; color: #333; margin: 10px 0; line-height: 1.8; }
+        .produto-card p { color: #555; font-size: 0.96em; line-height: 1.7; margin-top: 8px; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            animation: slideDown 0.5s;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .hero {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: fadeIn 0.6s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .hero h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-
-        .hero p {
-            color: #666;
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s;
-            animation: fadeIn 0.6s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
-
-        .feature-card h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-            font-size: 0.95em;
-        }
-
-        footer {
-            text-align: center;
-            color: white;
-            margin-top: 60px;
-            padding: 30px;
-            opacity: 0.8;
-        }
-
-        footer p {
-            margin: 5px 0;
-            font-size: 0.95em;
-        }
-
+        /* DEMAIS */
+        .profile-section { background: white; border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .profile-section h2 { color: #667eea; margin-bottom: 20px; font-size: 1.8em; }
+        .profile-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { color: #333; font-weight: bold; margin-bottom: 8px; }
+        .form-group input { padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #667eea; }
+        .how-to-section { background: white; border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .how-to-section h2 { color: #667eea; margin-bottom: 20px; font-size: 1.8em; text-align: center; }
+        .how-to-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .how-to-card { background: #f5f5f5; border-radius: 15px; padding: 20px; border-left: 5px solid #667eea; }
+        .how-to-card h3 { color: #667eea; margin-bottom: 15px; font-size: 1.2em; }
+        .how-to-card ol { margin-left: 20px; color: #666; line-height: 1.8; }
+        .how-to-card li { margin-bottom: 8px; }
+        .share-section { background: white; border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; }
+        .share-section h2 { color: #667eea; margin-bottom: 20px; font-size: 1.8em; }
+        .share-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .share-btn { padding: 12px 24px; border: none; border-radius: 25px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+        .share-btn:hover { transform: scale(1.05); }
+        .share-whatsapp { background: #25D366; color: white; }
+        .share-telegram { background: #0088cc; color: white; }
+        .share-copy { background: #667eea; color: white; }
+        footer { text-align: center; color: white; padding: 30px; margin-top: 40px; }
+        footer p { margin-bottom: 10px; }
+        .notification { position: fixed; top: 20px; right: 20px; background: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); animation: slideInRight 0.3s; z-index: 1000; }
+        @keyframes slideInRight { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .notification.success { border-left: 4px solid #4CAF50; }
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            .hero {
-                padding: 20px;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
+            header h1 { font-size: 1.8em; }
+            .hero { padding: 20px; }
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; }
+            .study-section { padding: 20px; }
+            .study-nav-btn { font-size: 0.85em; padding: 8px 14px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎓 Álgebra Quest</h1>
-            <p>Aprenda Álgebra de Forma Interativa e Divertida</p>
-        </header>
+<div class="container">
+    <header>
+        <h1>&#127891; Álgebra Quest</h1>
+        <p>Estude álgebra de forma divertida e aprenda com seus amigos!</p>
+    </header>
 
-        <div class="hero">
-            <h2>Bem-vindo ao Álgebra Quest</h2>
-            <p>Um app completo para aprender monômios, polinômios e produtos notáveis. Estude offline, pratique com questões dinâmicas e sincronize seus dados!</p>
-            <div class="btn-group">
-                <a href="algebra-quest-pwa.html" class="btn btn-primary">🚀 Abrir App Agora</a>
-            </div>
+    <div class="hero">
+        <h2>Bem-vindo ao Álgebra Quest</h2>
+        <p>Um app completo para aprender monômios, polinômios e produtos notáveis. Estude offline e sincronize seus dados!</p>
+        <div class="btn-group">
+            <a href="algebra-quest-pwa.html" class="btn btn-primary">&#128241; Abrir App Agora</a>
+            <button class="btn btn-secondary" onclick="scrollToStudy()">&#128214; Área de Estudos</button>
         </div>
-
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3>Aprenda</h3>
-                <p>Conteúdo completo sobre monômios, polinômios e produtos notáveis com explicações detalhadas.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎮</div>
-                <h3>Pratique</h3>
-                <p>Questões dinâmicas e infinitas com feedback instantâneo e explicações completas.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3>Desafio Diário</h3>
-                <p>Teste suas habilidades com o desafio diário e acompanhe seu progresso.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>Offline</h3>
-                <p>Funciona completamente offline e sincroniza seus dados quando conecta à internet.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎙️</div>
-                <h3>Podcast</h3>
-                <p>3 episódios educacionais para reforçar seu aprendizado de forma auditiva.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Relatório</h3>
-                <p>Acompanhe seu progresso com estatísticas detalhadas e análise de erros.</p>
-            </div>
-        </div>
-
-        <footer>
-            <p>© 2026 Álgebra Quest - Aprenda Álgebra de Forma Divertida</p>
-            <p>Desenvolvido para ajudar você a aprender melhor! 🚀</p>
-            <p style="margin-top: 20px; opacity: 0.8; font-size: 0.9em;">
-                <strong>Dica:</strong> O app funciona 100% offline! Clique em "Abrir App Agora" para começar.
-            </p>
-        </footer>
     </div>
 
-    <script>
-        // Sem scripts necessários
-    </script>
+    <div class="features">
+        <div class="feature-card"><div class="feature-icon">&#128218;</div><h3>Aprenda</h3><p>Conteúdo completo sobre monômios, polinômios e produtos notáveis com explicações detalhadas.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#127918;</div><h3>Pratique</h3><p>Questões dinâmicas e infinitas com feedback instantâneo e explicações completas.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#128241;</div><h3>Offline</h3><p>Funciona completamente offline e sincroniza seus dados quando conecta à internet.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#127897;&#65039;</div><h3>Podcast</h3><p>3 episódios educacionais para reforçar seu aprendizado de forma auditiva.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#128202;</div><h3>Progresso</h3><p>Acompanhe seu progresso com estatísticas detalhadas e recomendações personalizadas.</p></div>
+    </div>
+
+    <!-- AREA DE ESTUDOS -->
+    <div class="study-section" id="studySection">
+        <h2>&#128214; Área de Estudos</h2>
+        <p class="study-intro">Conteúdo completo e detalhado — clique em um tópico para estudar</p>
+
+        <div class="study-nav">
+            <button class="study-nav-btn active" onclick="showPanel('monomios', this)">&#128290; Monômios</button>
+            <button class="study-nav-btn" onclick="showPanel('polinomios', this)">&#10133; Polinômios</button>
+            <button class="study-nav-btn" onclick="showPanel('produtos', this)">&#10006;&#65039; Produtos Notáveis</button>
+        </div>
+
+        <!-- PAINEL MONOMIOS -->
+        <div class="study-panel active" id="panel-monomios">
+
+            <h3>O que é um Monômio?</h3>
+            <p>Um <strong>monômio</strong> é uma expressão algébrica formada por um único termo, que pode ser um número, uma variável ou o produto de números e variáveis. A palavra "mono" vem do grego e significa <em>um</em>.</p>
+            <div class="formula-box"><strong>Forma geral: a · x^n</strong><br>onde <strong>a</strong> = coeficiente (número real) e <strong>x^n</strong> = parte literal (variável com expoente)</div>
+
+            <div class="concept-grid">
+                <div class="concept-card"><h5>Exemplos de Monômios</h5><p>5x &nbsp;|&nbsp; -3y² &nbsp;|&nbsp; 7ab &nbsp;|&nbsp; -2x³y &nbsp;|&nbsp; 4 &nbsp;|&nbsp; x &nbsp;|&nbsp; ½a²b³</p></div>
+                <div class="concept-card"><h5>Não são Monômios</h5><p>x + y &nbsp;(dois termos)<br>a - b² &nbsp;(subtração de termos)<br>3x/y &nbsp;(variável no denominador)</p></div>
+            </div>
+
+            <h3>Partes do Monômio</h3>
+            <p>Todo monômio é composto por duas partes principais:</p>
+            <table class="study-table">
+                <thead><tr><th>Parte</th><th>Descrição</th><th>Exemplo: 5x²y³</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Coeficiente</strong></td><td>A parte numérica do monômio</td><td>5</td></tr>
+                    <tr><td><strong>Parte Literal</strong></td><td>As variáveis com seus expoentes</td><td>x²y³</td></tr>
+                    <tr><td><strong>Grau</strong></td><td>Soma dos expoentes da parte literal</td><td>2 + 3 = 5</td></tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box"><strong>⚠️ Atenção!</strong><p>O grau de um monômio numérico (apenas um número, como 7 ou -3) é <strong>zero</strong>. Já o monômio nulo (coeficiente = 0) não tem grau definido.</p></div>
+
+            <h3>Grau do Monômio</h3>
+            <p>O grau de um monômio é a soma dos expoentes de todas as variáveis que compõem a parte literal.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplos de grau:</div>
+                <div class="ex-step">4x³        →  grau 3   (só um expoente: 3)</div>
+                <div class="ex-step">-2x²y      →  grau 3   (2 + 1 = 3)</div>
+                <div class="ex-step">7a²b³c     →  grau 6   (2 + 3 + 1 = 6)</div>
+                <div class="ex-step">9          →  grau 0   (monômio numérico)</div>
+                <div class="ex-step">x          →  grau 1   (expoente implícito = 1)</div>
+            </div>
+
+            <h3>Monômios Semelhantes</h3>
+            <p>Dois ou mais monômios são <strong>semelhantes</strong> quando possuem a mesma parte literal (mesmas variáveis com os mesmos expoentes). Apenas o coeficiente pode ser diferente.</p>
+            <div class="concept-grid">
+                <div class="concept-card"><h5>✅ São semelhantes</h5><p>3x² e -7x² → mesma parte literal x²<br>5ab e 2ab → mesma parte ab<br>4x²y³ e -x²y³ → mesma parte x²y³</p></div>
+                <div class="concept-card"><h5>❌ Não são semelhantes</h5><p>3x² e 3x³ → expoentes diferentes<br>5ab e 5a²b → expoentes diferentes<br>2x e 2y → variáveis diferentes</p></div>
+            </div>
+
+            <h3>Adição e Subtração de Monômios</h3>
+            <p>Só é possível somar ou subtrair monômios <strong>semelhantes</strong>. Opera-se apenas os coeficientes, mantendo a parte literal.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplos:</div>
+                <div class="ex-step">5x² + 3x²              = (5+3)x²          = 8x²</div>
+                <div class="ex-step">7ab - 2ab              = (7-2)ab           = 5ab</div>
+                <div class="ex-step">4x³ + 2x²              → NÃO simplifica (termos diferentes)</div>
+                <div class="ex-step">-3x²y + 8x²y - x²y    = (-3+8-1)x²y      = 4x²y</div>
+            </div>
+
+            <h3>Multiplicação de Monômios</h3>
+            <p>Multiplica-se os coeficientes e <strong>somam-se os expoentes</strong> das variáveis iguais.</p>
+            <div class="formula-box"><strong>Regra:</strong> a^x · a^y = a^(x+y)   (soma dos expoentes de mesma base)</div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos:</div>
+                <div class="ex-step">3x² · 4x³           = (3·4) · x^(2+3)      = 12x⁵</div>
+                <div class="ex-step">2a · 5a²b            = (2·5) · a^(1+2) · b  = 10a³b</div>
+                <div class="ex-step">(-3x²y) · (2xy³)    = -6 · x^(2+1) · y^(1+3) = -6x³y⁴</div>
+                <div class="ex-step">4ab² · (-ab)         = -4 · a^(1+1) · b^(2+1) = -4a²b³</div>
+            </div>
+
+            <h3>Divisão de Monômios</h3>
+            <p>Divide-se os coeficientes e <strong>subtraem-se os expoentes</strong> das variáveis iguais.</p>
+            <div class="formula-box"><strong>Regra:</strong> a^x ÷ a^y = a^(x-y)   (subtração dos expoentes de mesma base)</div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos:</div>
+                <div class="ex-step">12x⁵ ÷ 4x²         = (12÷4) · x^(5-2)       = 3x³</div>
+                <div class="ex-step">20a⁴b³ ÷ 5a²b      = (20÷5) · a^(4-2) · b^(3-1) = 4a²b²</div>
+                <div class="ex-step">-15x³y² ÷ 3xy      = -5 · x^(3-1) · y^(2-1) = -5x²y</div>
+            </div>
+
+            <h3>Potência de Monômio</h3>
+            <p>Eleva-se o coeficiente à potência e <strong>multiplica-se os expoentes</strong> das variáveis.</p>
+            <div class="formula-box"><strong>Regra:</strong> (a · x^n)^m = a^m · x^(n·m)</div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos:</div>
+                <div class="ex-step">(2x³)²       = 2² · x^(3·2)        = 4x⁶</div>
+                <div class="ex-step">(3ab²)³      = 3³ · a³ · b^(2·3)   = 27a³b⁶</div>
+                <div class="ex-step">(-2x²y)³     = (-2)³ · x⁶ · y³     = -8x⁶y³</div>
+            </div>
+            <div class="tip-box"><strong>💡 Dica importante:</strong><p>Quando o coeficiente é negativo e o expoente é <strong>par</strong>, o resultado é positivo. Quando o expoente é <strong>ímpar</strong>, o resultado é negativo. Ex: (-2)² = 4 e (-2)³ = -8.</p></div>
+
+            <h3>Resumo das Operações com Monômios</h3>
+            <table class="study-table">
+                <thead><tr><th>Operação</th><th>Coeficientes</th><th>Expoentes</th><th>Exemplo</th></tr></thead>
+                <tbody>
+                    <tr><td>Adição/Subtração</td><td>Operam normalmente</td><td>Mantêm iguais (só semelhantes)</td><td>3x² + 5x² = 8x²</td></tr>
+                    <tr><td>Multiplicação</td><td>Multiplicam</td><td>Somam</td><td>2x² · 3x³ = 6x⁵</td></tr>
+                    <tr><td>Divisão</td><td>Dividem</td><td>Subtraem</td><td>6x⁵ ÷ 2x² = 3x³</td></tr>
+                    <tr><td>Potenciação</td><td>Potenciam</td><td>Multiplicam</td><td>(2x³)² = 4x⁶</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAINEL POLINOMIOS -->
+        <div class="study-panel" id="panel-polinomios">
+
+            <h3>O que é um Polinômio?</h3>
+            <p>Um <strong>polinômio</strong> é uma expressão algébrica formada pela soma (ou diferença) de dois ou mais monômios não semelhantes. Cada monômio que compõe o polinômio é chamado de <strong>termo</strong>.</p>
+            <div class="formula-box"><strong>Forma geral:</strong> a_n·x^n + a_(n-1)·x^(n-1) + ... + a_1·x + a_0<br>onde <strong>a_n ≠ 0</strong> e os coeficientes são números reais</div>
+
+            <div class="concept-grid">
+                <div class="concept-card"><h5>Exemplos de Polinômios</h5><p>x + 3 (binômio)<br>x² - 4x + 4 (trinômio)<br>2x³ + x² - 5x + 1<br>a² + 2ab + b²</p></div>
+                <div class="concept-card"><h5>Classificação por Nº de Termos</h5><p><strong>Monômio:</strong> 1 termo<br><strong>Binômio:</strong> 2 termos<br><strong>Trinômio:</strong> 3 termos<br><strong>Polinômio:</strong> 4+ termos</p></div>
+                <div class="concept-card"><h5>Classificação por Grau</h5><p><strong>Grau 1:</strong> linear<br><strong>Grau 2:</strong> quadrático<br><strong>Grau 3:</strong> cúbico<br><strong>Grau 4+:</strong> quártico, etc.</p></div>
+            </div>
+
+            <h3>Grau do Polinômio</h3>
+            <p>O grau de um polinômio é o <strong>maior grau</strong> dentre todos os seus termos. Analisa-se o grau de cada monômio e escolhe-se o maior.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplos de grau:</div>
+                <div class="ex-step">3x² + 5x - 7          →  grau 2  (maior expoente é 2)</div>
+                <div class="ex-step">x³ - 2x² + x - 1     →  grau 3  (maior expoente é 3)</div>
+                <div class="ex-step">4x⁵ + x² - 8          →  grau 5  (maior expoente é 5)</div>
+                <div class="ex-step">2ab² + 3a²b - a       →  grau 3  (2ab² tem grau 3: 1+2)</div>
+            </div>
+
+            <h3>Reduzindo um Polinômio</h3>
+            <p>Um polinômio está na forma <strong>reduzida</strong> quando não possui termos semelhantes. Para reduzi-lo, identifique e some os termos semelhantes.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: reduzir 3x² + 5x - 2x² + 4 - x</div>
+                <div class="ex-step">Passo 1: identificar semelhantes</div>
+                <div class="ex-step">Termos em x²: 3x² e -2x²</div>
+                <div class="ex-step">Termos em x:  5x e -x</div>
+                <div class="ex-step">Termos livres: 4</div>
+                <div class="ex-step">Passo 2: somar cada grupo</div>
+                <div class="ex-step">= (3-2)x² + (5-1)x + 4 = x² + 4x + 4  ✅</div>
+            </div>
+
+            <h3>Valor Numérico de um Polinômio</h3>
+            <p>O <strong>valor numérico</strong> é o resultado obtido ao substituir a variável por um número específico.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: calcule p(2) para p(x) = 3x² - 2x + 1</div>
+                <div class="ex-step">p(2) = 3·(2)² - 2·(2) + 1</div>
+                <div class="ex-step">p(2) = 3·4 - 4 + 1</div>
+                <div class="ex-step">p(2) = 12 - 4 + 1</div>
+                <div class="ex-step">p(2) = 9  ✅</div>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: calcule q(-1) para q(x) = x³ - 2x + 5</div>
+                <div class="ex-step">q(-1) = (-1)³ - 2·(-1) + 5</div>
+                <div class="ex-step">q(-1) = -1 + 2 + 5</div>
+                <div class="ex-step">q(-1) = 6  ✅</div>
+            </div>
+
+            <h3>Adição de Polinômios</h3>
+            <p>Agrupe e some os termos semelhantes.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: (3x² + 5x - 2) + (x² - 3x + 7)</div>
+                <div class="ex-step">= 3x² + 5x - 2 + x² - 3x + 7</div>
+                <div class="ex-step">= (3x² + x²) + (5x - 3x) + (-2 + 7)</div>
+                <div class="ex-step">= 4x² + 2x + 5  ✅</div>
+            </div>
+
+            <h3>Subtração de Polinômios</h3>
+            <p>Inverta o sinal de <strong>todos os termos do subtraendo</strong> e depois some os semelhantes.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: (5x² + 3x - 1) - (2x² - x + 4)</div>
+                <div class="ex-step">Passo 1: distribuir o sinal negativo</div>
+                <div class="ex-step">= 5x² + 3x - 1 - 2x² + x - 4</div>
+                <div class="ex-step">Passo 2: agrupar semelhantes</div>
+                <div class="ex-step">= (5x² - 2x²) + (3x + x) + (-1 - 4)</div>
+                <div class="ex-step">= 3x² + 4x - 5  ✅</div>
+            </div>
+            <div class="tip-box"><strong>⚠️ Cuidado com os sinais!</strong><p>Ao subtrair, o sinal negativo muda o sinal de <strong>todos</strong> os termos do segundo polinômio, não apenas do primeiro. Ex: -(2x² - x + 4) = -2x² + x - 4.</p></div>
+
+            <h3>Multiplicação de Polinômios</h3>
+            <p>Use a <strong>propriedade distributiva</strong>: multiplica-se cada termo do primeiro polinômio por todos os termos do segundo.</p>
+            <div class="example-box">
+                <div class="ex-title">Monômio × Polinômio: 2x · (3x² - 4x + 5)</div>
+                <div class="ex-step">= 2x·3x² + 2x·(-4x) + 2x·5</div>
+                <div class="ex-step">= 6x³ - 8x² + 10x  ✅</div>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Binômio × Binômio: (x + 3)(x + 2)</div>
+                <div class="ex-step">= x·x + x·2 + 3·x + 3·2</div>
+                <div class="ex-step">= x² + 2x + 3x + 6</div>
+                <div class="ex-step">= x² + 5x + 6  ✅</div>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Trinômio × Binômio: (x² + 2x - 1)(x + 3)</div>
+                <div class="ex-step">= x²·x + x²·3 + 2x·x + 2x·3 + (-1)·x + (-1)·3</div>
+                <div class="ex-step">= x³ + 3x² + 2x² + 6x - x - 3</div>
+                <div class="ex-step">= x³ + 5x² + 5x - 3  ✅</div>
+            </div>
+
+            <h3>Divisão de Polinômios</h3>
+            <p>Segue o algoritmo da divisão longa — semelhante à divisão de números inteiros.</p>
+            <div class="tip-box"><strong>💡 Antes de dividir:</strong><p>Ordene os polinômios de forma <strong>decrescente</strong> em relação ao grau e preencha graus ausentes com coeficiente 0.</p></div>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: (x² + 5x + 6) ÷ (x + 2)</div>
+                <div class="ex-step">Dividendo: x² + 5x + 6  |  Divisor: x + 2</div>
+                <div class="ex-step">x² ÷ x = x   →  1º termo do quociente</div>
+                <div class="ex-step">x · (x + 2) = x² + 2x</div>
+                <div class="ex-step">Resto parcial: (x² + 5x + 6) - (x² + 2x) = 3x + 6</div>
+                <div class="ex-step">3x ÷ x = 3   →  2º termo do quociente</div>
+                <div class="ex-step">3 · (x + 2) = 3x + 6</div>
+                <div class="ex-step">Resto final: (3x + 6) - (3x + 6) = 0</div>
+                <div class="ex-step">✅ Quociente = (x + 3),  Resto = 0</div>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplo com resto: (2x² + 3x - 1) ÷ (x + 2)</div>
+                <div class="ex-step">2x² ÷ x = 2x   →  1º termo</div>
+                <div class="ex-step">2x · (x + 2) = 2x² + 4x</div>
+                <div class="ex-step">Resto parcial: (2x² + 3x - 1) - (2x² + 4x) = -x - 1</div>
+                <div class="ex-step">-x ÷ x = -1   →  2º termo</div>
+                <div class="ex-step">-1 · (x + 2) = -x - 2</div>
+                <div class="ex-step">Resto final: (-x - 1) - (-x - 2) = 1</div>
+                <div class="ex-step">✅ Quociente = (2x - 1),  Resto = 1</div>
+            </div>
+
+            <h3>Polinômio Ordenado e Completo</h3>
+            <table class="study-table">
+                <thead><tr><th>Conceito</th><th>Definição</th><th>Exemplo</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Crescente</strong></td><td>Termos em ordem crescente de grau</td><td>1 + 2x + 3x²</td></tr>
+                    <tr><td><strong>Decrescente</strong></td><td>Termos em ordem decrescente de grau</td><td>3x² + 2x + 1</td></tr>
+                    <tr><td><strong>Completo</strong></td><td>Todos os graus do 0 ao máximo presentes</td><td>x³ + x² + x + 1</td></tr>
+                    <tr><td><strong>Incompleto</strong></td><td>Falta algum grau intermediário</td><td>x³ + 1 (falta x² e x)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Identidade dos Polinômios</h3>
+            <p>Dois polinômios são <strong>idênticos</strong> quando valem a igualdade para <strong>todos os valores</strong> da variável. Nesse caso, seus coeficientes correspondentes são necessariamente iguais.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: encontre a, b e c</div>
+                <div class="ex-step">Se ax² + bx + c = 3x² - 5x + 2 para todo x</div>
+                <div class="ex-step">Então: a = 3,  b = -5,  c = 2  ✅</div>
+            </div>
+
+            <h3>Raízes de um Polinômio</h3>
+            <p>A <strong>raiz</strong> de um polinômio p(x) é o valor de x que faz p(x) = 0. Encontrar as raízes é fundamental em equações polinomiais.</p>
+            <div class="example-box">
+                <div class="ex-title">Exemplo: verifique se x = 2 é raiz de p(x) = x² - 5x + 6</div>
+                <div class="ex-step">p(2) = (2)² - 5·(2) + 6</div>
+                <div class="ex-step">p(2) = 4 - 10 + 6</div>
+                <div class="ex-step">p(2) = 0  ✅  Logo, x = 2 É raiz!</div>
+            </div>
+        </div>
+
+        <!-- PAINEL PRODUTOS NOTAVEIS -->
+        <div class="study-panel" id="panel-produtos">
+
+            <h3>O que são Produtos Notáveis?</h3>
+            <p>Produtos notáveis são <strong>multiplicações especiais entre polinômios</strong> que surgem com tanta frequência na álgebra que recebem fórmulas próprias. Conhecê-las economiza tempo e é essencial para fatoração, equações e simplificações.</p>
+            <div class="tip-box"><strong>💡 Por que aprender?</strong><p>Em vez de fazer a distributiva completa toda vez, você aplica a fórmula diretamente. São a base para fatoração polinomial e resolução de equações de grau superior.</p></div>
+
+            <h3>1️⃣ Quadrado da Soma</h3>
+            <div class="produto-card">
+                <div class="pc-nome">Quadrado da Soma de Dois Termos</div>
+                <div class="pc-formula">(a + b)² = a² + 2ab + b²</div>
+                <p>O quadrado da soma é igual ao <strong>quadrado do primeiro</strong>, mais o <strong>dobro do produto dos dois termos</strong>, mais o <strong>quadrado do segundo</strong>. Atenção: o sinal de 2ab acompanha o sinal de b — aqui ambos positivos.</p>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos — Quadrado da Soma:</div>
+                <div class="ex-step">(x + 3)²      = x² + 2·x·3 + 3²     = x² + 6x + 9</div>
+                <div class="ex-step">(2a + 5)²     = (2a)² + 2·2a·5 + 5² = 4a² + 20a + 25</div>
+                <div class="ex-step">(3x + y)²     = 9x² + 6xy + y²</div>
+                <div class="ex-step">(x + 1)²      = x² + 2x + 1</div>
+                <div class="ex-step">(4a + 3b)²    = 16a² + 24ab + 9b²</div>
+            </div>
+            <div class="tip-box"><strong>⚠️ Erro clássico!</strong><p>(a + b)² <strong>NÃO é</strong> a² + b². O termo do meio <strong>2ab nunca pode ser omitido!</strong></p></div>
+
+            <h3>2️⃣ Quadrado da Diferença</h3>
+            <div class="produto-card">
+                <div class="pc-nome">Quadrado da Diferença de Dois Termos</div>
+                <div class="pc-formula">(a - b)² = a² - 2ab + b²</div>
+                <p>Similar ao quadrado da soma, mas com o termo central <strong>negativo</strong>. O último termo, b², é sempre <strong>positivo</strong>, pois é o quadrado de b.</p>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos — Quadrado da Diferença:</div>
+                <div class="ex-step">(x - 4)²      = x² - 2·x·4 + 4²     = x² - 8x + 16</div>
+                <div class="ex-step">(3a - 2b)²    = 9a² - 12ab + 4b²</div>
+                <div class="ex-step">(5x - 1)²     = 25x² - 10x + 1</div>
+                <div class="ex-step">(2x - y)²     = 4x² - 4xy + y²</div>
+                <div class="ex-step">(a - 7)²      = a² - 14a + 49</div>
+            </div>
+
+            <h3>3️⃣ Produto da Soma pela Diferença</h3>
+            <div class="produto-card">
+                <div class="pc-nome">Produto da Soma pela Diferença (Diferença de Quadrados)</div>
+                <div class="pc-formula">(a + b)(a - b) = a² - b²</div>
+                <p>O produto de uma soma pela diferença de dois mesmos termos resulta na <strong>diferença dos quadrados</strong>. O termo do meio <strong>sempre se cancela</strong> — é o mais elegante dos produtos notáveis e muito usado em simplificações e fatorações.</p>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos — Produto da Soma pela Diferença:</div>
+                <div class="ex-step">(x + 5)(x - 5)          = x² - 25</div>
+                <div class="ex-step">(3a + 2b)(3a - 2b)      = 9a² - 4b²</div>
+                <div class="ex-step">(4x + 1)(4x - 1)        = 16x² - 1</div>
+                <div class="ex-step">(2x + 7y)(2x - 7y)      = 4x² - 49y²</div>
+                <div class="ex-step">(x² + 3)(x² - 3)        = x⁴ - 9</div>
+            </div>
+            <div class="tip-box"><strong>💡 Como reconhecer?</strong><p>Se você vir um binômio do tipo a² - b² (dois quadrados perfeitos com subtração), saiba que ele se fatora como (a+b)(a-b).</p></div>
+
+            <h3>4️⃣ Cubo da Soma</h3>
+            <div class="produto-card">
+                <div class="pc-nome">Cubo da Soma de Dois Termos</div>
+                <div class="pc-formula">(a + b)³ = a³ + 3a²b + 3ab² + b³</div>
+                <p>O cubo da soma possui <strong>quatro termos</strong>, todos com sinal positivo. Os coeficientes seguem o padrão <strong>1, 3, 3, 1</strong> (triângulo de Pascal). Os expoentes de a decrescem (3,2,1,0) e os de b crescem (0,1,2,3).</p>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos — Cubo da Soma:</div>
+                <div class="ex-step">(x + 2)³    = x³ + 3x²·2 + 3x·4 + 8     = x³ + 6x² + 12x + 8</div>
+                <div class="ex-step">(a + 1)³    = a³ + 3a² + 3a + 1</div>
+                <div class="ex-step">(2x + y)³   = 8x³ + 12x²y + 6xy² + y³</div>
+                <div class="ex-step">(x + 3)³    = x³ + 9x² + 27x + 27</div>
+            </div>
+
+            <h3>5️⃣ Cubo da Diferença</h3>
+            <div class="produto-card">
+                <div class="pc-nome">Cubo da Diferença de Dois Termos</div>
+                <div class="pc-formula">(a - b)³ = a³ - 3a²b + 3ab² - b³</div>
+                <p>Idêntico ao cubo da soma, mas os <strong>sinais se alternam: +, -, +, -</strong>. Atenção especial: o último termo é <strong>-b³</strong> (negativo!).</p>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos — Cubo da Diferença:</div>
+                <div class="ex-step">(x - 3)³    = x³ - 9x² + 27x - 27</div>
+                <div class="ex-step">(a - 1)³    = a³ - 3a² + 3a - 1</div>
+                <div class="ex-step">(2x - y)³   = 8x³ - 12x²y + 6xy² - y³</div>
+                <div class="ex-step">(x - 2)³    = x³ - 6x² + 12x - 8</div>
+            </div>
+
+            <h3>6️⃣ Soma e Diferença de Cubos (Fatoração)</h3>
+            <div class="produto-card">
+                <div class="pc-nome">Fatoração: Soma e Diferença de Cubos</div>
+                <div class="pc-formula">
+                    a³ + b³ = (a + b)(a² - ab + b²)<br>
+                    a³ - b³ = (a - b)(a² + ab + b²)
+                </div>
+                <p>Usados para <strong>fatorar</strong> expressões cúbicas. O trinômio do segundo fator nunca é um quadrado perfeito (não confunda!). O sinal do termo ab no trinômio é sempre <strong>oposto</strong> ao sinal entre os cubos.</p>
+            </div>
+            <div class="example-box">
+                <div class="ex-title">Exemplos — Soma e Diferença de Cubos:</div>
+                <div class="ex-step">x³ + 8      = x³ + 2³   = (x + 2)(x² - 2x + 4)</div>
+                <div class="ex-step">27a³ - 1    = (3a)³ - 1³ = (3a - 1)(9a² + 3a + 1)</div>
+                <div class="ex-step">8x³ + y³    = (2x + y)(4x² - 2xy + y²)</div>
+                <div class="ex-step">125 - x³    = 5³ - x³   = (5 - x)(25 + 5x + x²)</div>
+            </div>
+
+            <h3>Tabela Resumo — Todos os Produtos Notáveis</h3>
+            <table class="study-table">
+                <thead><tr><th>#</th><th>Nome</th><th>Fórmula</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Quadrado da Soma</td><td>(a+b)² = a² + 2ab + b²</td></tr>
+                    <tr><td>2</td><td>Quadrado da Diferença</td><td>(a-b)² = a² - 2ab + b²</td></tr>
+                    <tr><td>3</td><td>Produto Soma × Diferença</td><td>(a+b)(a-b) = a² - b²</td></tr>
+                    <tr><td>4</td><td>Cubo da Soma</td><td>(a+b)³ = a³ + 3a²b + 3ab² + b³</td></tr>
+                    <tr><td>5</td><td>Cubo da Diferença</td><td>(a-b)³ = a³ - 3a²b + 3ab² - b³</td></tr>
+                    <tr><td>6</td><td>Soma de Cubos</td><td>a³+b³ = (a+b)(a²-ab+b²)</td></tr>
+                    <tr><td>7</td><td>Diferença de Cubos</td><td>a³-b³ = (a-b)(a²+ab+b²)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Como Reconhecer Produtos Notáveis</h3>
+            <p>Muitas vezes você recebe um polinômio já expandido e precisa reconhecer que ele é um produto notável para fatorar. Veja os critérios:</p>
+            <div class="concept-grid">
+                <div class="concept-card"><h5>É quadrado perfeito?</h5><p>Trinômio com 3 termos: verifique se o 1º e 3º são quadrados perfeitos e se o 2º é exatamente o dobro do produto das raízes. Ex: x² + 6x + 9 = (x+3)²</p></div>
+                <div class="concept-card"><h5>É diferença de quadrados?</h5><p>Binômio: dois quadrados perfeitos separados por subtração. Ex: x² - 16 = (x+4)(x-4)</p></div>
+                <div class="concept-card"><h5>É cubo perfeito?</h5><p>Quadrinômio: verifique se o 1º e 4º termos são cubos perfeitos e se os coeficientes seguem o padrão 1,3,3,1. Ex: x³ - 6x² + 12x - 8 = (x-2)³</p></div>
+                <div class="concept-card"><h5>É soma/diferença de cubos?</h5><p>Binômio: dois cubos perfeitos com soma ou subtração. Ex: 8x³ - 1 = (2x)³ - 1³ = (2x-1)(4x²+2x+1)</p></div>
+            </div>
+
+            <div class="example-box">
+                <div class="ex-title">Exercício completo: fatore x⁴ - 16</div>
+                <div class="ex-step">x⁴ - 16  =  (x²)² - (4)²         →  diferença de quadrados</div>
+                <div class="ex-step">         =  (x² + 4)(x² - 4)      →  aplicar novamente no 2º fator</div>
+                <div class="ex-step">         =  (x² + 4)(x + 2)(x - 2)  ✅  completamente fatorado</div>
+            </div>
+
+            <div class="example-box">
+                <div class="ex-title">Exercício completo: fatore 2x³ - 16</div>
+                <div class="ex-step">2x³ - 16  =  2(x³ - 8)            →  fator comum primeiro</div>
+                <div class="ex-step">          =  2(x³ - 2³)            →  diferença de cubos</div>
+                <div class="ex-step">          =  2(x - 2)(x² + 2x + 4)  ✅</div>
+            </div>
+
+            <div class="tip-box"><strong>🏆 Dica final:</strong><p>Sempre verifique se o polinômio pode ser fatorado <strong>mais de uma vez</strong>! Um produto notável pode conter outro produto notável dentro de si. E nunca esqueça de tirar o <strong>fator comum</strong> antes de aplicar qualquer fórmula.</p></div>
+        </div>
+    </div>
+    <!-- FIM DA AREA DE ESTUDOS -->
+
+    <div class="how-to-section">
+        <h2>&#128640; Como Usar</h2>
+        <div class="how-to-grid">
+            <div class="how-to-card">
+                <h3>&#128241; iPhone (iOS)</h3>
+                <ol>
+                    <li>Clique em "Abrir App Agora"</li>
+                    <li>Clique em "Compartilhar" (ícone de seta)</li>
+                    <li>Selecione "Adicionar à Tela Inicial"</li>
+                    <li>Nomeie como "Álgebra Quest"</li>
+                    <li>Pronto! O app estará na sua tela inicial</li>
+                </ol>
+            </div>
+            <div class="how-to-card">
+                <h3>&#129302; Android</h3>
+                <ol>
+                    <li>Clique em "Abrir App Agora"</li>
+                    <li>Clique no menu (⋮) no canto superior</li>
+                    <li>Selecione "Instalar app"</li>
+                    <li>Confirme a instalação</li>
+                    <li>Pronto! O app estará na sua tela inicial</li>
+                </ol>
+            </div>
+            <div class="how-to-card">
+                <h3>&#128187; Computador</h3>
+                <ol>
+                    <li>Clique em "Abrir App Agora"</li>
+                    <li>Clique no ícone de instalação (canto superior)</li>
+                    <li>Ou use como app web no navegador</li>
+                    <li>Funciona perfeitamente offline</li>
+                    <li>Sincroniza quando conecta à internet</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <h2>&#128100; Seu Perfil</h2>
+        <div class="profile-form">
+            <div class="form-group">
+                <label for="playerName">Nome do Jogador</label>
+                <input type="text" id="playerName" placeholder="Digite seu nome" onchange="saveProfile()">
+            </div>
+            <div class="form-group">
+                <label for="school">Escola/Turma</label>
+                <input type="text" id="school" placeholder="Sua escola ou turma" onchange="saveProfile()">
+            </div>
+        </div>
+    </div>
+
+    <div class="share-section">
+        <h2>&#128228; Compartilhe com Amigos</h2>
+        <p style="color: #666; margin-bottom: 20px;">Convide seus amigos para estudar juntos!</p>
+        <div class="share-buttons">
+            <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">&#128172; WhatsApp</button>
+            <button class="share-btn share-telegram" onclick="shareTelegram()">&#9992;&#65039; Telegram</button>
+            <button class="share-btn share-copy" onclick="copyLink()">&#128279; Copiar Link</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&#169; 2026 Álgebra Quest - Aprenda Álgebra de Forma Divertida</p>
+        <p>Desenvolvido para ajudar você e seus amigos a aprender melhor! &#128640;</p>
+        <p style="margin-top: 20px; opacity: 0.8; font-size: 0.9em;">
+            <strong>Dica:</strong> O app funciona 100% offline! Baixe agora e estude em qualquer lugar.
+        </p>
+    </footer>
+</div>
+
+<script>
+    window.addEventListener('load', () => { loadProfile(); });
+
+    function showPanel(id, btn) {
+        document.querySelectorAll('.study-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.study-nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('panel-' + id).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    function scrollToStudy() {
+        document.getElementById('studySection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveProfile() {
+        localStorage.setItem('playerName', document.getElementById('playerName').value);
+        localStorage.setItem('school', document.getElementById('school').value);
+        showNotification('Perfil salvo!', 'success');
+    }
+
+    function loadProfile() {
+        document.getElementById('playerName').value = localStorage.getItem('playerName') || '';
+        document.getElementById('school').value = localStorage.getItem('school') || '';
+    }
+
+    function shareWhatsApp() {
+        const msg = 'Estou estudando Álgebra Quest! Venha estudar comigo! Funciona offline!';
+        window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    function shareTelegram() {
+        const msg = 'Estou estudando Álgebra Quest! Venha estudar comigo! Funciona offline!';
+        window.open('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(() => showNotification('Link copiado!', 'success'));
+    }
+
+    function showNotification(message, type) {
+        const n = document.createElement('div');
+        n.className = 'notification ' + (type || '');
+        n.textContent = message;
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 3000);
+    }
+</script>
 </body>
 </html>
